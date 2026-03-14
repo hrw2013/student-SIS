@@ -29,6 +29,9 @@ document.getElementById("grades").innerHTML +=
 
 }
 
+document.getElementById("grades").innerHTML +=
+"<tr><td>"+grade.assignmentID+"</td><td>"+grade.score+"</td></tr>";
+
 function logout(){
 auth.signOut();
 window.location.href="index.html";
