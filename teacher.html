@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Teacher Panel</title>
+</head>
+
+<body>
+
+<h1>Teacher Panel</h1>
+
+<h2>Create Assignment</h2>
+
+<input id="classID" placeholder="Class ID">
+<input id="title" placeholder="Assignment Title">
+<input id="dueDate" placeholder="Due Date">
+
+<button onclick="createAssignment()">Create</button>
+
+<hr>
+
+<h2>Enter Grade</h2>
+
+<input id="studentID" placeholder="Student ID">
+<input id="assignmentID" placeholder="Assignment ID">
+<input id="score" placeholder="Score">
+
+<button onclick="submitGrade()">Submit Grade</button>
+
+<hr>
+
+<a href="dashboard.html">Back to Dashboard</a>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script src="firebase.js"></script>
+
+<script>
+
+function createAssignment(){
+
+db.collection("assignments").add({
+classID:document.getElementById("classID").value,
+title:document.getElementById("title").value,
+dueDate:document.getElementById("dueDate").value
+});
+
+alert("Assignment created");
+
+}
+
+function submitGrade(){
+
+db.collection("grades").add({
+studentID:document.getElementById("studentID").value,
+assignmentID:document.getElementById("assignmentID").value,
+score:Number(document.getElementById("score").value)
+});
+
+alert("Grade submitted");
+
+}
+
+</script>
+
+</body>
+
+</html>
