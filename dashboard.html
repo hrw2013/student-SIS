@@ -1,48 +1,28 @@
 <!DOCTYPE html>
 <html>
+<head>
+<title>Student Dashboard</title>
+</head>
+<body>
 
-<h1>Dashboard</h1>
+<h1>Student Dashboard</h1>
 
 <h2>Your Grades</h2>
-
 <table border="1">
-<tr>
-<th>Assignment</th>
-<th>Score</th>
-</tr>
-
+<tr><th>Assignment</th><th>Score</th></tr>
 <tbody id="grades"></tbody>
 </table>
 
+<br>
+<a href="assignments.html">View Assignments</a>
+<br>
 <button id="logoutBtn">Logout</button>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script src="firebase.js"></script>
 <script src="dashboard.js"></script>
 
-  <script>
-    auth.onAuthStateChanged((user)=>{
-  if(!user){
-    window.location.href="index.html";
-    return;
-  }
-
-  db.collection("users").doc(user.uid).get().then((doc)=>{
-    if(!doc.exists){
-      alert("User not found");
-      auth.signOut();
-      window.location.href="index.html";
-      return;
-    }
-
-    // If teacher tries to access dashboard, redirect to teacher panel
-    if(doc.data().role === "teacher"){
-      window.location.href="teacher.html";
-      return;
-    }
-
-    loadGrades(user.uid);
-  });
-});
-    
-  </script>
+</body>
 </html>
