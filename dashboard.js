@@ -50,7 +50,7 @@ document.getElementById("grades").innerHTML +=
 });
 
 }
-
+document.getElementById("logoutBtn").addEventListener("click", logout);
 function logout(){
   auth.signOut()
     .then(() => {
