@@ -1,2 +1,2 @@
-# SIS-test
-test student information system template
+# Student-SIS
+student information system template
