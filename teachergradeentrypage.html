@@ -5,3 +5,17 @@
 <input id="score" placeholder="Score">
 
 <button onclick="submitGrade()">Submit</button>
+
+<script>
+  function submitGrade(){
+
+db.collection("grades").add({
+studentID:document.getElementById("studentID").value,
+assignmentID:document.getElementById("assignmentID").value,
+score:Number(document.getElementById("score").value)
+});
+
+alert("Grade added");
+
+}
+</script>
