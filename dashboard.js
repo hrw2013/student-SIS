@@ -52,6 +52,11 @@ document.getElementById("grades").innerHTML +=
 }
 
 function logout(){
-auth.signOut();
-window.location.href="index.html";
+  auth.signOut()
+    .then(() => {
+      window.location.href = "index.html";
+    })
+    .catch((error) => {
+      alert("Error signing out: " + error.message);
+    });
 }
