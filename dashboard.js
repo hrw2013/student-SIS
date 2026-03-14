@@ -5,9 +5,31 @@ window.location.href="index.html";
 return;
 }
 
-loadGrades(user.uid);
+checkRole(user.uid);
 
 });
+
+function checkRole(uid){
+
+db.collection("users").doc(uid).get().then((doc)=>{
+
+if(!doc.exists){
+alert("User record not found");
+return;
+}
+
+const data = doc.data();
+
+if(data.role === "teacher"){
+window.location.href = "teacher.html";
+return;
+}
+
+loadGrades(uid);
+
+});
+
+}
 
 function loadGrades(studentID){
 
@@ -28,9 +50,6 @@ document.getElementById("grades").innerHTML +=
 });
 
 }
-
-document.getElementById("grades").innerHTML +=
-"<tr><td>"+grade.assignmentID+"</td><td>"+grade.score+"</td></tr>";
 
 function logout(){
 auth.signOut();
