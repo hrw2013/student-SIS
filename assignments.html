@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Assignments</title>
+</head>
+
+<body>
+
+<h1>Assignments</h1>
+
+<table border="1">
+<tr>
+<th>Class</th>
+<th>Title</th>
+<th>Due Date</th>
+</tr>
+
+<tbody id="assignmentTable"></tbody>
+</table>
+
+<br>
+<a href="dashboard.html">Back to Dashboard</a>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script src="firebase.js"></script>
+
+<script>
+
+auth.onAuthStateChanged((user)=>{
+
+if(!user){
+window.location.href="index.html";
+return;
+}
+
+loadAssignments();
+
+});
+
+function loadAssignments(){
+
+db.collection("assignments").get().then((snapshot)=>{
+
+snapshot.forEach((doc)=>{
+
+const a = doc.data();
+
+document.getElementById("assignmentTable").innerHTML +=
+"<tr><td>"+a.classID+"</td><td>"+a.title+"</td><td>"+a.dueDate+"</td></tr>";
+
+});
+
+});
+
+}
+
+</script>
+
+</body>
+
+</html>
