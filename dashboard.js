@@ -1,56 +1,52 @@
-auth.onAuthStateChanged((user)=>{
+// dashboard.js
 
-if(!user){
-window.location.href="index.html";
-return;
-}
+let inactivityTime = 60 * 60 * 1000; // 1 hour
+let inactivityTimer;
 
-checkRole(user.uid);
+// Check auth state and redirect based on role
+auth.onAuthStateChanged((user) => {
+  if(!user){
+    window.location.href = "index.html";
+    return;
+  }
 
+  db.collection("users").doc(user.uid).get().then((doc)=>{
+    if(!doc.exists){
+      alert("User record not found");
+      auth.signOut();
+      window.location.href="index.html";
+      return;
+    }
+
+    const role = doc.data().role;
+
+    if(role === "teacher"){
+      window.location.href="teacher.html";
+      return;
+    }
+
+    // Student: load grades and start inactivity timer
+    loadGrades(user.uid);
+    resetTimer();
+    setupActivityListeners();
+  });
 });
 
-function checkRole(uid){
-
-db.collection("users").doc(uid).get().then((doc)=>{
-
-if(!doc.exists){
-alert("User record not found");
-return;
-}
-
-const data = doc.data();
-
-if(data.role === "teacher"){
-window.location.href = "teacher.html";
-return;
-}
-
-loadGrades(uid);
-
-});
-
-}
-
+// Load student grades
 function loadGrades(studentID){
-
-db.collection("grades")
-.where("studentID","==",studentID)
-.get()
-.then((snapshot)=>{
-
-snapshot.forEach((doc)=>{
-
-const grade = doc.data();
-
-document.getElementById("grades").innerHTML +=
-"<p>"+grade.assignmentID+" : "+grade.score+"</p>";
-
-});
-
-});
-
+  db.collection("grades")
+    .where("studentID","==",studentID)
+    .get()
+    .then((snapshot)=>{
+      snapshot.forEach((doc)=>{
+        const g = doc.data();
+        document.getElementById("grades").innerHTML +=
+          `<tr><td>${g.assignmentID}</td><td>${g.score}</td></tr>`;
+      });
+    });
 }
-document.getElementById("logoutBtn").addEventListener("click", logout);
+
+// Logout
 function logout(){
   auth.signOut()
     .then(() => {
@@ -60,3 +56,23 @@ function logout(){
       alert("Error signing out: " + error.message);
     });
 }
+
+// Inactivity timer
+function resetTimer(){
+  clearTimeout(inactivityTimer);
+  inactivityTimer = setTimeout(()=>{
+    alert("Logged out due to 1 hour of inactivity.");
+    logout();
+  }, inactivityTime);
+}
+
+// Track activity
+function setupActivityListeners(){
+  const events = ['mousemove', 'keydown', 'mousedown', 'touchstart'];
+  events.forEach(event => {
+    document.addEventListener(event, resetTimer, true);
+  });
+}
+
+// Logout button
+document.getElementById("logoutBtn").addEventListener("click", logout);
